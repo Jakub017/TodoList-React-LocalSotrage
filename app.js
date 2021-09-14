@@ -15,15 +15,45 @@ const Changelog = () => {
     )
 }
 
+const AddTaskPanel = (props) => {
+    const {add, title, description, titleValue, descriptionValue, click} = props
+    return(
+        <>
+        <div className="addTaskPanel">
+        <h1>Todo List</h1>
+            <div className ="addForm">
+                <input maxlength="23" onClick={click} value={titleValue} onChange={title} type="text" placeholder={"Wpisz nazwę zadania"}/>
+                <textarea onClick={click} value={descriptionValue} onChange={description} maxlength="80"  name="" id="" cols="30" rows="10" placeholder={"Wpisz krótki opis zadania (opcjonalnie, max 80 znaków)"}></textarea>
+                <button onClick={add} className={"addButton"}>Dodaj zadanie</button>
+            </div>
+        </div>
+        </>
+    )
+}
+
+const OptionsPanel = (props) => {
+    const {click} = props;
+    return(
+        <div className="options">
+            <span className="activeTasks" onClick={click}>Aktywne</span>
+            <span className="doneTasks" onClick={click}>Wykonane</span>
+        </div>
+    )
+}
 
 const ActiveTaskList = (props) => {
     const {tasks, complete, del} = props;
     return(
     <> 
-        <ul>
-        <h1>Zadania do wykonania:</h1>
+        <ul className="tasks">
             {tasks.map(task => {return(
-                <li key={task.id}><h2>{task.title}</h2><h3>{task.description}</h3><button onClick={() => complete(task.id)}>Wykonane</button><button onClick={() => del(task.id)}>Usuń</button></li>
+                <li className="element" key={task.id}>
+                    <h2>{task.title}</h2>
+                    <div className="description">{task.description}</div>
+                    <h4>Data dodania: {task.startDate}</h4>
+                    <button onClick={() => complete(task.id)}>Wykonane</button>
+                    <button onClick={() => del(task.id)}>Usuń</button>
+                </li>
             )})}
         </ul>
     </>
@@ -34,33 +64,41 @@ const CompletedTasksList = (props) => {
     const {tasks, del} = props;
     return(
         <>
-            <ul>
-                <h1>Wykonane zadania:</h1>
+            <ul className="tasks">
                 {tasks.map(task =>{return(
-                    <li key={task.id}><h2>{task.title}</h2><h3>{task.description}</h3><button onClick={() => del(task.id)}>Usuń</button></li>
+                    <li className="element" key={task.id}>
+                        <h2>{task.title}</h2>
+                        <h3>{task.description}</h3>
+                        <button onClick={() => del(task.id)}>Usuń</button>
+                    </li>
                 )})}
             </ul>
         </>
     )
 }
 
-const AddTaskPanel = (props) => {
-    const {add, title, description, titleValue, descriptionValue} = props
-    return(
-        <>
-        <div className="form">
-            <input value={titleValue} onChange={title} type="text" placeholder={"Wpisz nazwę zadania"}/>
-            <textarea value={descriptionValue} onChange={description} name="" id="" cols="30" rows="10" placeholder={"Wpisz krótki opis zadania"}></textarea>
-            <button onClick={add} className={"addButton"}>Dodaj zadanie</button>
-        </div>
-        </>
-    )
+
+function startDate() {
+    let date = new Date();
+    let day = date.getDate();
+    let month = date.getMonth();
+    let year = date.getFullYear();
+    let hour = date.getHours();
+    let minutes = date.getMinutes();
+    let seconds = date.getSeconds();
+    if(day < 10) day = `0${day}`;
+    if(month < 10) month = `0${month}`;
+    if(hour < 10) hour = `0${hour}`;
+    if(minutes < 10) minutes = `0${minutes}`;
+    if(seconds < 10) seconds = `0${seconds}`;
+    return `${day}.${month}.${year}  ${hour}:${minutes}:${seconds}`;
 }
 
 class Task {
     constructor(title, description){
         this.id = Math.random();
         this.title = title;
+        this.startDate = startDate();
         this.description = description;
     }
 }
@@ -72,6 +110,8 @@ class App extends React.Component {
         completedTasks: localStorage.getItem("doneTasks") ? JSON.parse(localStorage.getItem("doneTasks")) : [],
         taskTitle: '',
         taskDescription: '',
+        option: "active",
+        focusedOption: "active"
     }
 
   
@@ -155,11 +195,40 @@ class App extends React.Component {
         })
     }
 
+    switchTasks = (e) => {
+        if(e.target.className === "doneTasks") {
+            this.setState({
+                option: "done",
+            })
+        } else if(e.target.className === "activeTasks") {
+            this.setState({
+                option: "active",
+            })
+        }
+    }
+
+    displayList = () => {
+        if(this.state.option === "active") {
+            return (
+                    <ActiveTaskList 
+                    del={this.removeActiveTask}
+                    complete={this.handleCompleteTask}
+                    tasks={this.state.activeTasks}
+                    display={this.displayTasks}
+                    />
+            )
+        } else if(this.state.option === "done") {
+            return (
+                    <CompletedTasksList
+                    del={this.removeDoneTask}
+                    tasks={this.state.completedTasks}
+                    />
+            )
+        }
+    }
     render() {
         return(
             <>
-                <Changelog/>
-                <h1>Todo List</h1>
                 <AddTaskPanel
                 description={this.setTaskDescription}
                 titleValue={this.state.taskTitle}
@@ -167,17 +236,11 @@ class App extends React.Component {
                 title={this.setTaskTitle} 
                 add={this.handleAddTask}
                 />
+                <OptionsPanel
+                click={this.switchTasks}
+                />
                 <div className="lists">
-                    <ActiveTaskList 
-                    del={this.removeActiveTask}
-                    complete={this.handleCompleteTask}
-                    tasks={this.state.activeTasks}
-                    display={this.displayTasks}
-                    />
-                    <CompletedTasksList
-                    del={this.removeDoneTask}
-                    tasks={this.state.completedTasks}
-                    />
+                    {this.displayList()}
                 </div>
             </>
         )
