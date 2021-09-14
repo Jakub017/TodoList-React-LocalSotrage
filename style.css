@@ -1,0 +1,33 @@
+* {
+    font-family: arial;
+}
+
+.lists {
+    display: flex;
+}
+
+ul:nth-child(2) {
+    margin-left: 100px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+}
+
+input {
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+
+textarea {
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.addButton {
+    width: 50%;
+    padding: 10px;
+}
