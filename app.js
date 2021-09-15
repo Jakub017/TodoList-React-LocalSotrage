@@ -22,8 +22,8 @@ const AddTaskPanel = (props) => {
         <div className="addTaskPanel">
         <h1>Todo List</h1>
             <div className ="addForm">
-                <input maxlength="23" onClick={click} value={titleValue} onChange={title} type="text" placeholder={"Wpisz nazwę zadania"}/>
-                <textarea onClick={click} value={descriptionValue} onChange={description} maxlength="80"  name="" id="" cols="30" rows="10" placeholder={"Wpisz krótki opis zadania (opcjonalnie, max 80 znaków)"}></textarea>
+                <input maxLength="23" onClick={click} value={titleValue} onChange={title} type="text" placeholder={"Wpisz nazwę zadania"}/>
+                <textarea onClick={click} value={descriptionValue} onChange={description} maxLength="80"  name="" id="" cols="30" rows="10" placeholder={"Wpisz krótki opis zadania (opcjonalnie, max 80 znaków)"}></textarea>
                 <button onClick={add} className={"addButton"}>Dodaj zadanie</button>
             </div>
         </div>
@@ -51,8 +51,8 @@ const ActiveTaskList = (props) => {
                     <h2>{task.title}</h2>
                     <div className="description">{task.description}</div>
                     <h4>Data dodania: {task.startDate}</h4>
-                    <button onClick={() => complete(task.id)}>Wykonane</button>
-                    <button onClick={() => del(task.id)}>Usuń</button>
+                    <i className="fas fa-check" onClick={() => complete(task.id)}></i>
+                    <i className="fas fa-trash" onClick={() => del(task.id)}></i>
                 </li>
             )})}
         </ul>
@@ -66,11 +66,12 @@ const CompletedTasksList = (props) => {
         <>
             <ul className="tasks">
                 {tasks.map(task =>{return(
-                    <li className="element" key={task.id}>
-                        <h2>{task.title}</h2>
-                        <h3>{task.description}</h3>
-                        <button onClick={() => del(task.id)}>Usuń</button>
-                    </li>
+                <li className="doneElement" key={task.id}>
+                    <h2>{task.title}</h2>
+                    <div className="description">{task.description}</div>
+                    <h4>Data dodania: {task.startDate}</h4>
+                    <i className="fas fa-trash" onClick={() => del(task.id)}></i>
+                </li>
                 )})}
             </ul>
         </>

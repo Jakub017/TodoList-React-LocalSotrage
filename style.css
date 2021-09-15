@@ -127,17 +127,18 @@ ul.tasks {
 
 /* Element Style starts */
 
-li.element {
+li.element,
+li.doneElement {
     width: 300px;
     height: 270px;
     display: grid;
-    grid-template-rows: 20% 55% 10% 15%;
+    grid-template-rows: 20% 35% 30% 15%;
     grid-template-columns: 1fr 15% 15% 15%;
     grid-template-areas:
         "title title title title"
         "description description description description"
         "startDate startDate startDate startDate"
-        ". check edit delete";
+        ". . check delete";
     padding: 10px;
     border-top: 3px solid rgb(117, 144, 182);
     margin-right: 50px;
@@ -145,26 +146,49 @@ li.element {
     background-color: #fff;
     border-radius: 0 0 1rem 1rem;
     box-shadow: 0 0 2px gray;
-
 }
+
 
 li.element:nth-child(4n) {
     margin-right: 0;
 }
 
-.element h2 {
+.element h2,
+.doneElement h2 {
     grid-area: title;
 }
 
-.element .description {
+.element .description,
+.doneElement .description {
     display: block;
     grid-area: description;
     max-width: 100%;
     word-wrap: break-word;
 }
 
-.element h4 {
+.element h4,
+.doneElement h4 {
     grid-area: startDate;
 }
+
+.fas {
+    font-size: 1.5rem;
+    color: rgb(117, 144, 182);
+    cursor: pointer;
+    transition: all 0.5s;
+}
+
+.fas:hover {
+    transform: scale(1.1);
+}
+
+.fa-check {
+    grid-area: check;
+}
+
+.fa-trash {
+    grid-area: delete;
+}
+
 
 /* Element Style ends */
