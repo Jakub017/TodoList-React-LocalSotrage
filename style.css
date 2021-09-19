@@ -166,8 +166,8 @@ li.element:nth-child(4n) {
     word-wrap: break-word;
 }
 
-.element h4,
-.doneElement h4 {
+.element .startDate,
+.doneElement .startDate {
     grid-area: startDate;
 }
 

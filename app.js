@@ -50,7 +50,7 @@ const ActiveTaskList = (props) => {
                 <li className="element" key={task.id}>
                     <h2>{task.title}</h2>
                     <div className="description">{task.description}</div>
-                    <h4>Data dodania: {task.startDate}</h4>
+                    <div className="startDate">Data dodania: {task.startDate}</div>
                     <i className="fas fa-check" onClick={() => complete(task.id)}></i>
                     <i className="fas fa-trash" onClick={() => del(task.id)}></i>
                 </li>
@@ -69,7 +69,7 @@ const CompletedTasksList = (props) => {
                 <li className="doneElement" key={task.id}>
                     <h2>{task.title}</h2>
                     <div className="description">{task.description}</div>
-                    <h4>Data dodania: {task.startDate}</h4>
+                    <div className="startDate">Data dodania: {task.startDate}</div>
                     <i className="fas fa-trash" onClick={() => del(task.id)}></i>
                 </li>
                 )})}
@@ -82,7 +82,7 @@ const CompletedTasksList = (props) => {
 function startDate() {
     let date = new Date();
     let day = date.getDate();
-    let month = date.getMonth();
+    let month = date.getMonth() + 1;
     let year = date.getFullYear();
     let hour = date.getHours();
     let minutes = date.getMinutes();
@@ -121,6 +121,7 @@ class App extends React.Component {
         const index = activeTasks.findIndex(task => task.id === id);
         activeTasks.map(task => {
             if(task.id === id) {
+                task.startDate = startDate();
                 this.addToLocalDoneTasks(task);
             }
         })
